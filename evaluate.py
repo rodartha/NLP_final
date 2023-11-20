@@ -20,6 +20,23 @@ def main():
 
     #reformat_hans()
     hans_misses()
+    #hypothesis_only()
+
+def hypothesis_only():
+    filename = 'eval_output/eval_predictions.jsonl'
+
+    with open(filename, mode='r') as f:
+        evaluation_data = [json.loads(line) for line in f]
+
+    hypothesis_only_data = []
+    for line in evaluation_data:
+        line['premise'] = ''
+        hypothesis_only_data.append(line)
+
+    outfile = 'analysis_sets/eval_hypo_only.jsonl'
+
+    with open(outfile, mode='w') as f:
+        json.dump(hypothesis_only_data, f)
 
 def hans_misses():
     filename = 'hans_analysis/eval_predictions.jsonl'
