@@ -19,8 +19,10 @@ def main():
     """
 
     #reformat_hans()
-    hans_misses()
+    #hans_misses()
     #hypothesis_only()
+
+    print("Nothing to run at the moment")
 
 def hypothesis_only():
     filename = 'eval_output/eval_predictions.jsonl'
@@ -72,7 +74,7 @@ def hans_misses():
 
 
 def reformat_hans():
-    filename = 'analysis_sets/heuristics_evaluation_set.jsonl'
+    filename = 'hans_training/heuristics_train_set.jsonl'
 
     with open(filename, mode='r') as f:
         evaluation_data = [json.loads(line) for line in f]
@@ -96,7 +98,7 @@ def reformat_hans():
                 new_data_object[key] = line[key]
         formatted_data.append(new_data_object)
 
-    outfile = 'analysis_sets/hans_reformatted.jsonl'
+    outfile = 'hans_training/hans_train_reformatted.jsonl'
 
     print(possible_labels)
 
