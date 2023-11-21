@@ -3,21 +3,6 @@ import json
 
 
 def main():
-    #filename = 'eval_output/eval_predictions.jsonl'
-    """
-    filename = 'analysis_sets/heuristics_evaluation_set.jsonl'
-
-    with open(filename, mode='r') as f:
-        evaluation_data = [json.loads(line) for line in f]
-
-    print(len(evaluation_data))
-    print(evaluation_data[0].keys())
-
-    for key in evaluation_data[0].keys():
-        print(key)
-        print(evaluation_data[10000][key])
-    """
-
     #reformat_hans()
     #hans_misses()
     #find_misses()
