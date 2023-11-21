@@ -20,9 +20,101 @@ def main():
 
     #reformat_hans()
     #hans_misses()
+    #find_misses()
     #hypothesis_only()
+    #percent_misses_each_category()
+    #check_matches_hans_no_hans()
 
     print("Nothing to run at the moment")
+
+def check_matches_hans_no_hans():
+    filename1 = 'eval_output/incorrect_predictions.jsonl'
+
+    with open(filename1, mode='r') as f:
+        og_eval_misses = [json.loads(line) for line in f][0]
+
+    filename2 = 'eval_output_hans_trained/incorrect_predictions.jsonl'
+
+    with open(filename2, mode='r') as f:
+        hans_eval_misses = [json.loads(line) for line in f][0]
+
+    joint_misses = []
+    for og_line in og_eval_misses:
+        for hans_line in hans_eval_misses:
+            if og_line['premise'] == hans_line['premise'] and og_line['hypothesis'] == hans_line['hypothesis']:
+                joint_misses.append(og_line)
+                break
+
+    print(len(joint_misses))
+
+    outfile = 'comparisons/hans_vs_og_on_snli.jsonl'
+
+    with open(outfile, mode='w') as f:
+        json.dump(joint_misses, f)
+
+
+def percent_misses_each_category():
+    filename = 'eval_output/incorrect_predictions.jsonl'
+
+    with open(filename, mode='r') as f:
+        evaluation_data = [json.loads(line) for line in f][0]
+
+    amount_each_predicted_label = {
+        'entailment': {
+            'total': 0,
+            'percent': 0,
+            'real_label': {
+                'neutral': 0,
+                'non-entailment': 0
+            }
+        },
+        'neutral': {
+            'total': 0,
+            'percent': 0,
+            'real_label': {
+                'entailment': 0,
+                'non-entailment': 0
+            }
+        },
+        'non-entailment': {
+            'total': 0,
+            'percent': 0,
+            'real_label': {
+                'neutral': 0,
+                'entailment': 0
+            }
+        },
+        'total_incorrect': len(evaluation_data)
+    }
+
+    for line in evaluation_data:
+        if line['predicted_label'] == 0:
+            amount_each_predicted_label['entailment']['total'] += 1
+            if line['label'] == 1:
+                amount_each_predicted_label['entailment']['real_label']['neutral'] += 1
+            else:
+                amount_each_predicted_label['entailment']['real_label']['non-entailment'] += 1
+        elif line['predicted_label'] == 1:
+            amount_each_predicted_label['neutral']['total'] += 1
+            if line['label'] == 0:
+                amount_each_predicted_label['neutral']['real_label']['entailment'] += 1
+            else:
+                amount_each_predicted_label['neutral']['real_label']['non-entailment'] += 1
+        else:
+            amount_each_predicted_label['non-entailment']['total'] += 1
+            if line['label'] == 0:
+                amount_each_predicted_label['non-entailment']['real_label']['entailment'] += 1
+            else:
+                amount_each_predicted_label['non-entailment']['real_label']['neutral'] += 1
+
+    for key in amount_each_predicted_label.keys():
+        if key == 'total_incorrect':
+            pass
+        else:
+            amount_each_predicted_label[key]['percent'] = amount_each_predicted_label[key]['total'] / amount_each_predicted_label['total_incorrect']
+
+    print(amount_each_predicted_label)
+
 
 def hypothesis_only():
     filename = 'eval_output/eval_predictions.jsonl'
@@ -40,8 +132,27 @@ def hypothesis_only():
     with open(outfile, mode='w') as f:
         json.dump(hypothesis_only_data, f)
 
+def find_misses():
+    filename = 'eval_output/eval_predictions.jsonl'
+
+    with open(filename, mode='r') as f:
+        evaluation_data = [json.loads(line) for line in f]
+
+    incorrect_data = []
+
+    for line in evaluation_data:
+        if line['label'] == line['predicted_label']:
+            pass
+        else:
+            incorrect_data.append(line)
+
+    outfile = 'eval_output/incorrect_predictions.jsonl'
+
+    with open(outfile, mode='w') as f:
+        json.dump(incorrect_data, f)
+
 def hans_misses():
-    filename = 'hans_analysis/eval_predictions.jsonl'
+    filename = 'eval_output_hans_trained_on_hans/eval_predictions.jsonl'
 
     with open(filename, mode='r') as f:
         evaluation_data = [json.loads(line) for line in f]
@@ -67,7 +178,7 @@ def hans_misses():
     print("CLASS OF CORRECT:")
     print(class_correct)
 
-    outfile = 'hans_analysis/incorrect_predictions.jsonl'
+    outfile = 'eval_output_hans_trained_on_hans/incorrect_predictions.jsonl'
 
     with open(outfile, mode='w') as f:
         json.dump(incorrect_data, f)
