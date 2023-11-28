@@ -8,7 +8,7 @@ def main():
     #find_misses()
     #hypothesis_only()
     #percent_misses_each_category()
-    #check_matches_hans_no_hans()
+    check_matches_hans_no_hans()
 
     print("Nothing to run at the moment")
 
@@ -18,7 +18,7 @@ def check_matches_hans_no_hans():
     with open(filename1, mode='r') as f:
         og_eval_misses = [json.loads(line) for line in f][0]
 
-    filename2 = 'eval_output_hans_trained/incorrect_predictions.jsonl'
+    filename2 = 'eval_output_hans_smaller/incorrect_predictions.jsonl'
 
     with open(filename2, mode='r') as f:
         hans_eval_misses = [json.loads(line) for line in f][0]
@@ -32,14 +32,14 @@ def check_matches_hans_no_hans():
 
     print(len(joint_misses))
 
-    outfile = 'comparisons/hans_vs_og_on_snli.jsonl'
+    outfile = 'comparisons/hans_smaller_vs_og_on_snli.jsonl'
 
     with open(outfile, mode='w') as f:
         json.dump(joint_misses, f)
 
 
 def percent_misses_each_category():
-    filename = 'eval_output/incorrect_predictions.jsonl'
+    filename = 'eval_output_hans_smaller/incorrect_predictions.jsonl'
 
     with open(filename, mode='r') as f:
         evaluation_data = [json.loads(line) for line in f][0]
@@ -118,7 +118,7 @@ def hypothesis_only():
         json.dump(hypothesis_only_data, f)
 
 def find_misses():
-    filename = 'eval_output/eval_predictions.jsonl'
+    filename = 'eval_output_hans_smaller/eval_predictions.jsonl'
 
     with open(filename, mode='r') as f:
         evaluation_data = [json.loads(line) for line in f]
@@ -131,7 +131,7 @@ def find_misses():
         else:
             incorrect_data.append(line)
 
-    outfile = 'eval_output/incorrect_predictions.jsonl'
+    outfile = 'eval_output_hans_smaller/incorrect_predictions.jsonl'
 
     with open(outfile, mode='w') as f:
         json.dump(incorrect_data, f)
