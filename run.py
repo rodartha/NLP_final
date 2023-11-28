@@ -70,7 +70,7 @@ def main():
 
         #eval_split = 'validation_matched' if dataset_id == ('glue', 'mnli') else 'validation'
         # FIXME: if using the aNLI dataset, use this to split the dataset
-        eval_split = 'test_r1'
+        eval_split = 'test_r3'
 
 
 
@@ -110,8 +110,8 @@ def main():
     eval_dataset_featurized = None
     if training_args.do_train:
         # train_dataset = dataset['train']
-        # FIXME: for anli set
-        train_dataset = dataset['train_r1']
+        # FIXME: for anli set, train on all three examples...
+        train_dataset = datasets.concatenate_datasets([dataset['train_r1'], dataset['train_r2'], dataset['train_r3']])
         if args.max_train_samples:
             train_dataset = train_dataset.select(range(args.max_train_samples))
         train_dataset_featurized = train_dataset.map(
