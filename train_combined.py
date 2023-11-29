@@ -45,8 +45,8 @@ def main():
 
     dataset_snli_id = "snli"
     dataset_anli_id = "anli"
-    dataset_snli = datasets.load_dataset(*dataset_snli_id)
-    dataset_anli = datasets.load_dataset(*dataset_anli_id)
+    dataset_snli = datasets.load_dataset(dataset_snli_id)
+    dataset_anli = datasets.load_dataset(dataset_anli_id)
     
     # NLI models need to have the output label count specified (label 0 is "entailed", 1 is "neutral", and 2 is "contradiction")
     task_kwargs = {'num_labels': 3}
