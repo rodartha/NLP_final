@@ -74,7 +74,8 @@ def main():
     train_dataset_featurized = None
     eval_dataset_featurized = None
 
-    train_dataset = datasets.concatenate_datasets([dataset_anli['train_r1'], dataset_anli['train_r2'], dataset_anli['train_r3'], dataset_snli['train']])
+    #train_dataset = datasets.concatenate_datasets([dataset_anli['train_r1'], dataset_anli['train_r2'], dataset_anli['train_r3'], dataset_snli['train']])
+    train_dataset = datasets.concatenate_datasets([dataset_anli['train_r1'], dataset_anli['train_r2'], dataset_anli['train_r3']])
     if args.max_train_samples:
         train_dataset = train_dataset.select(range(args.max_train_samples))
     train_dataset_featurized = train_dataset.map(
